@@ -15,7 +15,7 @@ contract Insurance {
   }
 
   function joinPool(uint amount, uint insureAgainst) {
-    if(members[msg.sender] != 0 || insureAgainst > 100) return;
+    if(validMember(msg.sender) && insureAgainst <= 100) return;
 
     member m;
     m.addr = msg.sender;
@@ -27,10 +27,22 @@ contract Insurance {
     pool += amount;
   }
 
+  function payIn(uint amount) {
+
+  }
+
   function payOut(address claimedBlock, address member) {
+
+    //hashTail = 
+     
     if(members[member.insureAgainst] == hashTail) {
-      member.send(pool);
+      member.addr.send(pool);
     }
+  }
+
+  function validMember(address addr) {
+    if(members[addr] != 0) { return true; }
+    else return false;
   }
 
 }
