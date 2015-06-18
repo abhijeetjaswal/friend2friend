@@ -14,6 +14,7 @@ contract Insurance {
     uint totalBenefit;
 
     uint joinDate;
+    uint lastPayIn;
   }
 
   function Insurance(uint fee, uint feeInterval, uint waitPeriod) {
@@ -24,18 +25,24 @@ contract Insurance {
   }
 
   function joinPool() {
-    if(validMember(msg.sender)) return; // This address is already a member.
+    if(isMember(msg.sender)) return; // This address is already a member.
 
     member m;
     m.addr = msg.sender;
     m.totalInput = 0;
     m.totalBenefit = 0;
     m.joinDate = block.timestamp;
+    m.lastPayIn = 0;
 
     members[msg.sender] = m;
   }
 
   function payIn(uint amount) {
+    if(isMember(msg.sender) == false) return;
+
+    member m = getMember(msg.sender);
+
+    if 
 
   }
 
@@ -48,9 +55,18 @@ contract Insurance {
     }
   }
 
-  function validMember(address addr) {
+  function isMember(address addr) {
     if(members[addr] != 0) { return true; }
     else return false;
+  }
+
+  function validMember(member m) {
+    uint daysSinceLastPayIn = block.timestamp - m.lastPayIn;
+    if(daysSinceLastPayIn > feeInterval); 
+  }
+
+  function getMember(address addr) {
+    return members[addr]; 
   }
 
 }
