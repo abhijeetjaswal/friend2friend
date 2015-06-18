@@ -48,7 +48,7 @@ contract Insurance {
 
     if(memberExists() == false) return;
 
-    member m = getMember(msg.sender);
+    member m = getMember();
 
     if(validMember(m) && msg.value == fee) {
       m.totalInput += msg.value;
@@ -81,7 +81,7 @@ contract Insurance {
 
   /* ==== UTILS ==== */
 
-  function validPayIn(member m) {
+  function validPayIn(member m) returns (bool) {
 
     if(validMember(m) && msg.value == fee) {
       return true;
@@ -91,7 +91,7 @@ contract Insurance {
     
   }
 
-  function validMember(member m) {
+  function validMember(member m) returns (bool) {
     if(m != 0 && m.nextFeeDue > block.timestamp) {
       return true; 
     } else {
@@ -107,8 +107,8 @@ contract Insurance {
     }
   }
 
-  function getMember(address addr) {
-    return members[addr]; 
+  function getMember() returns (member) {
+    return members[msg.sender]; 
   }
 
 }
