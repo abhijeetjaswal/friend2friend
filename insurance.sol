@@ -47,10 +47,10 @@ contract Insurance {
 
     member m = getMember(msg.sender);
 
-    /* Check if msg.value == fee */
-    if(validMember(m)) {
+    if(validMember(m) && msg.value == fee) {
       m.totalInput += msg.value;
       pool += msg.value;
+      m.lastPayIn = block.timestamp;
     } else {
       return;
     }
