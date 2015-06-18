@@ -30,7 +30,7 @@ contract Insurance {
   function joinPool() {
 
     /* Check if this address is already a member and if the fee is correct. */
-    if(isMember(msg.sender) || msg.value != fee) return;
+    if(validMember(msg.sender) || msg.value != fee) return;
 
     /* Initialize new member. */
     member m;
@@ -45,7 +45,6 @@ contract Insurance {
 
   /* Pay fees for this feeInterval. */
   function payIn() {
-    if(isMember(msg.sender) == false) return;
 
     member m = getMember(msg.sender);
 
@@ -59,17 +58,8 @@ contract Insurance {
 
   }
 
-  /* If totalInput is 0, the user isn't active yet. */
-  function validPayIn(member m) {
+  function requestPayOut() {
 
-    /* Check that the member is valid, the submitted value matches the required
-       fee and that payIn is neither too soon, nor too late. */
-    if(validMember(m) && msg.value == fee && block.timestamp < m.nextFeeDue) {
-      return true;
-    } else {
-      return false;
-    }
-    
   }
 
   /* Pay out to a member following group consent to request. */
@@ -77,17 +67,23 @@ contract Insurance {
     return;
   }
 
-  function isMember(address addr) {
-    if(members[addr] != 0) { return true; }
-    else return false;
+  /* ==== UTILS ==== */
+
+  function validPayIn(member m) {
+
+    if(validMember(m) && msg.value == fee) {
+      return true;
+    } else {
+      return false;
+    }
+    
   }
 
-  /* THIS IS INCOMPLETE */
   function validMember(member m) {
-    if(m.nextFeeDue > block.timestamp) {
-      return false; 
+    if(m != 0 && m.nextFeeDue > block.timestamp) {
+      return true; 
     } else {
-      return true;
+      return false;
     }
   }
 
