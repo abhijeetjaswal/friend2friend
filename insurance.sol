@@ -58,12 +58,18 @@ contract Insurance {
 
   }
 
-  function requestPayOut() {
-
+  function requestPayOut(uint amount) {
+    member m = getMember(msg.sender);
+    if(validMember(m)) {
+      // Message all members for vote.
+      // If vote is successful, payOut(msg.sender, amount)
+    } else {
+      return;
+    }
   }
 
   /* Pay out to a member following group consent to request. */
-  function payOut(address claimant) {
+  function payOut(address claimant, uint amount) {
     return;
   }
 
