@@ -45,6 +45,8 @@ contract Insurance {
 
     member m = getMember(msg.sender);
 
+    /* I need to actually make sure the transaction gets sent... This is
+       essentially meaningless as is. */
     if(validMember(m)) {
       m.totalInput += amount;
       pool += amount;
@@ -57,8 +59,6 @@ contract Insurance {
   /* Pay out to a member following group consent to request. */
   function payOut(address claimedBlock, address member) {
 
-    //hashTail = 
-     
     if(members[member.insureAgainst] == hashTail) {
       member.addr.send(pool);
     }
