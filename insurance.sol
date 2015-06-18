@@ -27,16 +27,19 @@ contract Insurance {
     this.waitPeriod = waitPeriod;
   }
 
-  /* Join this pool. First payIn happens seperately/later. */
+  /* Join this pool. */
   function joinPool() {
-    if(isMember(msg.sender)) return; // This address is already a member.
 
+    /* Check if this address is already a member and if the fee is correct. */
+    if(isMember(msg.sender) || msg.value != fee) return;
+
+    /* Initialize new member. */
     member m;
     m.addr = msg.sender;
-    m.totalInput = 0;
+    m.totalInput = msg.value;
     m.totalBenefit = 0;
     m.joinDate = block.timestamp;
-    m.lastPayIn = 0;
+    m.lastPayIn = block.timestamp;
 
     members[msg.sender] = m;
   }
@@ -56,6 +59,22 @@ contract Insurance {
     }
 
   }
+
+  /* If totalInput is 0, the user isn't active yet. */
+  function validPayIn(member m) {
+
+  uint daysSinceLastPayIn = tStampsToDays(block.timestamp - m.lastPayIn)
+
+    if(validMember(m) && msg.value == fee &&
+       daysSinceLastPayIn ) ) {
+      return true;
+    } else {
+      return false;
+    }
+    
+  }
+
+  // TODO: Function for converting timestamp - timestamp to units of days
 
   /* Pay out to a member following group consent to request. */
   function payOut(address claimedBlock, address member) {
