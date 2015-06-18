@@ -15,7 +15,6 @@ contract Insurance {
     uint totalInput;
     uint totalBenefit;
 
-    uint lastPayIn;
     uint nextFeeDue;
   }
 
@@ -38,8 +37,7 @@ contract Insurance {
     m.addr = msg.sender;
     m.totalInput = 0;
     m.totalBenefit = 0;
-    m.lastPayIn = block.timestamp;
-    m.nextFeeDue = lastPayIn + feeInterval;
+    m.nextFeeDue = block.timestamp + feeInterval;
 
     /* Enroll new member. */
     members[msg.sender] = m;
@@ -54,7 +52,6 @@ contract Insurance {
     if(validMember(m) && msg.value == fee) {
       m.totalInput += msg.value;
       pool += msg.value;
-      m.lastPayIn = block.timestamp;
       m.nextFeeDue = m.nextFeeDue + feeInterval;
     } else {
       return;
@@ -67,7 +64,7 @@ contract Insurance {
 
     /* Check that the member is valid, the submitted value matches the required
        fee and that payIn is neither too soon, nor too late. */
-    if(validMember(m) && msg.value == fee && block.timestamp < nextDue) {
+    if(validMember(m) && msg.value == fee && block.timestamp < m.nextFeeDue) {
       return true;
     } else {
       return false;
@@ -75,14 +72,9 @@ contract Insurance {
     
   }
 
-  // TODO: Function for converting timestamp - timestamp to units of days
-
   /* Pay out to a member following group consent to request. */
-  function payOut(address claimedBlock, address member) {
-
-    if(members[member.insureAgainst] == hashTail) {
-      member.addr.send(pool);
-    }
+  function payOut(address claimant) {
+    return;
   }
 
   function isMember(address addr) {
@@ -92,8 +84,11 @@ contract Insurance {
 
   /* THIS IS INCOMPLETE */
   function validMember(member m) {
-    uint daysSinceLastPayIn = block.timestamp - m.lastPayIn;
-    if(daysSinceLastPayIn > feeInterval); 
+    if(m.nextFeeDue > block.timestamp) {
+      return false; 
+    } else {
+      return true;
+    }
   }
 
   function getMember(address addr) {
