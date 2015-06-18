@@ -19,18 +19,18 @@ contract Insurance {
   }
 
   /* Pool setup */
-  function Insurance(uint fee, uint feeInterval, uint waitPeriod) {
+  function Insurance(uint feeSet, uint feeIntervalSet, uint waitPeriodSet) {
     pool = 0;
-    this.fee = fee;
-    this.feeInterval = feeInterval;
-    this.waitPeriod = waitPeriod;
+    fee = feeSet;
+    feeInterval = feeIntervalSet;
+    waitPeriod = waitPeriodSet;
   }
 
   /* Join this pool. */
   function joinPool() {
 
     /* Check if this address is already a member and if the fee is correct. */
-    if(validMember(msg.sender) || msg.value != fee) return;
+    if(memberExists() || msg.value != fee) return;
 
     /* Initialize new member. */
     member m;
@@ -46,6 +46,8 @@ contract Insurance {
   /* Pay fees for this feeInterval. */
   function payIn() {
 
+    if(memberExists() == false) return;
+
     member m = getMember(msg.sender);
 
     if(validMember(m) && msg.value == fee) {
@@ -59,7 +61,11 @@ contract Insurance {
   }
 
   function requestPayOut(uint amount) {
+
+    if(memberExists() == false) return;
+
     member m = getMember(msg.sender);
+
     if(validMember(m)) {
       // Message all members for vote.
       // If vote is successful, payOut(msg.sender, amount)
@@ -90,6 +96,14 @@ contract Insurance {
       return true; 
     } else {
       return false;
+    }
+  }
+
+  function memberExists() returns (bool) {
+    if(members[msg.sender].addr == 0) {
+      return false;
+    } else {
+      return true;
     }
   }
 
