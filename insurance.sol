@@ -31,7 +31,7 @@ contract Insurance {
   function joinPool() {
 
     /* Check if this address is already a member and if the fee is correct. */
-    if(isMember(msg.sender) || msg.value != fee) return;
+    if(isMember(msg.sender) == true || msg.value != fee) return;
 
     /* Initialize new member. */
     member m;
