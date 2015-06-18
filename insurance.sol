@@ -15,8 +15,8 @@ contract Insurance {
     uint totalInput;
     uint totalBenefit;
 
-    uint joinDate;
     uint lastPayIn;
+    uint nextFeeDue;
   }
 
   /* Pool setup */
@@ -31,16 +31,17 @@ contract Insurance {
   function joinPool() {
 
     /* Check if this address is already a member and if the fee is correct. */
-    if(isMember(msg.sender) == true || msg.value != fee) return;
+    if(isMember(msg.sender) || msg.value != fee) return;
 
     /* Initialize new member. */
     member m;
     m.addr = msg.sender;
-    m.totalInput = msg.value;
+    m.totalInput = 0;
     m.totalBenefit = 0;
-    m.joinDate = block.timestamp;
     m.lastPayIn = block.timestamp;
+    m.nextFeeDue = lastPayIn + feeInterval;
 
+    /* Enroll new member. */
     members[msg.sender] = m;
   }
 
@@ -54,6 +55,7 @@ contract Insurance {
       m.totalInput += msg.value;
       pool += msg.value;
       m.lastPayIn = block.timestamp;
+      m.nextFeeDue = m.nextFeeDue + feeInterval;
     } else {
       return;
     }
@@ -63,10 +65,9 @@ contract Insurance {
   /* If totalInput is 0, the user isn't active yet. */
   function validPayIn(member m) {
 
-  uint daysSinceLastPayIn = tStampsToDays(block.timestamp - m.lastPayIn)
-
-    if(validMember(m) && msg.value == fee &&
-       daysSinceLastPayIn ) ) {
+    /* Check that the member is valid, the submitted value matches the required
+       fee and that payIn is neither too soon, nor too late. */
+    if(validMember(m) && msg.value == fee && block.timestamp < nextDue) {
       return true;
     } else {
       return false;
