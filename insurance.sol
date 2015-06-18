@@ -17,6 +17,7 @@ contract Insurance {
     uint lastPayIn;
   }
 
+  /* Pool setup */
   function Insurance(uint fee, uint feeInterval, uint waitPeriod) {
     pool = 0;
     this.fee = fee;
@@ -24,6 +25,7 @@ contract Insurance {
     this.waitPeriod = waitPeriod;
   }
 
+  /* Join this pool. First payIn happens seperately/later. */
   function joinPool() {
     if(isMember(msg.sender)) return; // This address is already a member.
 
@@ -37,6 +39,7 @@ contract Insurance {
     members[msg.sender] = m;
   }
 
+  /* Pay fees for this feeInterval. */
   function payIn(uint amount) {
     if(isMember(msg.sender) == false) return;
 
@@ -51,6 +54,7 @@ contract Insurance {
 
   }
 
+  /* Pay out to a member following group consent to request. */
   function payOut(address claimedBlock, address member) {
 
     //hashTail = 
