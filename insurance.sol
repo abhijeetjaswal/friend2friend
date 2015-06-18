@@ -47,6 +47,7 @@ contract Insurance {
 
     member m = getMember(msg.sender);
 
+    /* Check if msg.value == fee */
     if(validMember(m)) {
       m.totalInput += msg.value;
       pool += msg.value;
