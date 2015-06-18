@@ -9,8 +9,8 @@ contract Insurance {
 
   struct member {
     address addr;
-    uint timeIn;
     uint totalInput;
+    uint daysIn; 
     uint totalBenefit;
   }
 
@@ -21,17 +21,16 @@ contract Insurance {
     this.waitPeriod = waitPeriod;
   }
 
-  function joinPool(uint amount, uint insureAgainst) {
-    if(validMember(msg.sender) && insureAgainst <= 100) return;
+  function joinPool() {
+    if(validMember(msg.sender)) return; // This address is already a member.
 
     member m;
     m.addr = msg.sender;
-    m.timeIn = 0;
-    m.totalInput = amount;
-    m.insureAgainst = insureAgainst;
+    m.totalInput = 0;
+    m.daysIn = 0;
+    m.totalBenefit = 0;
 
     members[msg.sender] = m;
-    pool += amount;
   }
 
   function payIn(uint amount) {
