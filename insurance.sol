@@ -42,7 +42,12 @@ contract Insurance {
 
     member m = getMember(msg.sender);
 
-    if 
+    if(validMember(m)) {
+      m.totalInput += amount;
+      pool += amount;
+    } else {
+      return;
+    }
 
   }
 
@@ -60,6 +65,7 @@ contract Insurance {
     else return false;
   }
 
+  /* THIS IS INCOMPLETE */
   function validMember(member m) {
     uint daysSinceLastPayIn = block.timestamp - m.lastPayIn;
     if(daysSinceLastPayIn > feeInterval); 
