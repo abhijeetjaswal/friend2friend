@@ -9,9 +9,11 @@ contract Insurance {
 
   struct member {
     address addr;
+
     uint totalInput;
-    uint daysIn; 
     uint totalBenefit;
+
+    uint joinDate;
   }
 
   function Insurance(uint fee, uint feeInterval, uint waitPeriod) {
@@ -27,8 +29,8 @@ contract Insurance {
     member m;
     m.addr = msg.sender;
     m.totalInput = 0;
-    m.daysIn = 0;
     m.totalBenefit = 0;
+    m.joinDate = block.timestamp;
 
     members[msg.sender] = m;
   }
