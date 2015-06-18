@@ -100,11 +100,7 @@ contract Insurance {
   }
 
   function memberExists() returns (bool) {
-    if(members[msg.sender].addr == 0) {
-      return false;
-    } else {
-      return true;
-    }
+    return members[msg.sender].addr == 0;
   }
 
   function getMember() returns (member) {
