@@ -1,3 +1,5 @@
+// TODO: Breakout util functions into seperate contract and inherit into main.
+
 contract Insurance {
   
   mapping(address => member) members;
@@ -40,16 +42,14 @@ contract Insurance {
   }
 
   /* Pay fees for this feeInterval. */
-  function payIn(uint amount) {
+  function payIn() {
     if(isMember(msg.sender) == false) return;
 
     member m = getMember(msg.sender);
 
-    /* I need to actually make sure the transaction gets sent... This is
-       essentially meaningless as is. */
     if(validMember(m)) {
-      m.totalInput += amount;
-      pool += amount;
+      m.totalInput += msg.value;
+      pool += msg.value;
     } else {
       return;
     }
