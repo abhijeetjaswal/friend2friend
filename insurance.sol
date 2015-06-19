@@ -29,8 +29,8 @@ contract Insurance {
   /* Join this pool. */
   function joinPool() {
 
-    /* Check if this address is already a member and if the fee is correct. */
-    if(memberExists() || msg.value != fee) return;
+    /* Check if this address is already a member. */
+    if(memberExists()) return;
 
     /* Initialize new member. */
     member m;
@@ -46,8 +46,6 @@ contract Insurance {
   /* Pay fees for this feeInterval. */
   function payIn() {
 
-    if(memberExists() == false) return;
-
     member m = members[msg.sender];
 
     if(validMember(m) && msg.value == fee) {
@@ -61,8 +59,6 @@ contract Insurance {
   }
 
   function requestPayOut(uint amount) {
-
-    if(memberExists() == false) return;
 
     member m = members[msg.sender];
 
@@ -81,11 +77,6 @@ contract Insurance {
   }
 
   /* ==== UTILS ==== */
-
-  function validPayIn(member m) private returns (bool) {
-    if(validMember(m) && msg.value == fee) { return true; }
-    else { return false; }
-  }
 
   function validMember(member m) private returns (bool) {
     if(m.addr != 0 && m.nextFeeDue > block.timestamp) { return true; }
