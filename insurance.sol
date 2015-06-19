@@ -85,23 +85,13 @@ contract Insurance {
   /* ==== UTILS ==== */
 
   function validPayIn(member m) private returns (bool) {
-
-    if(validMember(m) && msg.value == fee) {
-      return true;
-    } else {
-      return false;
-    }
-    
+    if(validMember(m) && msg.value == fee) { return true; }
+    else { return false; }
   }
 
   function validMember(member m) private returns (bool) {
-
-    if(m.addr != 0 && m.nextFeeDue > block.timestamp) {
-      return true; 
-    } else {
-      return false;
-    }
-
+    if(m.addr != 0 && m.nextFeeDue > block.timestamp) { return true; }
+    else { return false; }
   }
 
   function memberExists() returns (bool) {
