@@ -22,9 +22,10 @@ contract Insurance {
   }
 
   struct claim {
-    member claimant;
+    //member claimant;
+    address addr;
     uint amount;
-    bytes8[] claimMsg;
+    //bytes8[] claimMsg;
   }
 
   /* Pool setup */
@@ -68,15 +69,15 @@ contract Insurance {
 
   }
 
-  function requestPayOut(uint amount, bytes8[] claimMsg) {
+  function requestPayOut(uint amount) {
 
     member m = members[msg.sender];
 
     if(validMember(m)) {
       claim c;
-      c.claimant = members[msg.sender];
+      c.addr = members[msg.sender].addr;
       c.amount = amount;
-      c.claimMsg = claimMsg;
+      //c.claimMsg = claimMsg;
 
       pendingClaims[pendingClaimsCount] = c;
       pendingClaimsCount++;
@@ -88,6 +89,10 @@ contract Insurance {
       return;
     }
 
+  }
+
+  function getClaim() {
+    
   }
 
   /* Pay out to a member following group consent to request. */
