@@ -7,10 +7,13 @@ contract Insurance {
   uint feeInterval; // The frequency, in days, in which fees must be paid.
   uint waitPeriod;  /* The period, in days, for which new members must maintain
                        their membership before being able to make claims. */
-  uint pendingClaimsCount;
+  //uint pendingClaimsCount;
 
   mapping(address => member) members;
-  claim[2] pendingClaims;
+  mapping(address => claim) pendingClaims;
+  /* claim[2] pendingClaims; I think a problem with doing this as an array is
+                             that there's no (good) way for clients to query a
+                             particular claim. */
   
   struct member {
     address addr;
@@ -79,11 +82,11 @@ contract Insurance {
       c.amount = amount;
       //c.claimMsg = claimMsg;
 
-      pendingClaims[pendingClaimsCount] = c;
-      pendingClaimsCount++;
-      if(pendingClaimsCount == pendingClaims.length) {
-        pendingClaims.length = pendingClaimsCount * 2;
-      }
+      pendingClaims[msg.sender] = c;
+      //pendingClaimsCount++;
+      //if(pendingClaimsCount == pendingClaims.length) {
+      //  pendingClaims.length = pendingClaimsCount * 2;
+      //}
 
     } else {
       return;
