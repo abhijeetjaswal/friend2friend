@@ -48,7 +48,8 @@ contract Insurance {
 
     if(memberExists() == false) return;
 
-    member m = getMember();
+    //member m = getMember();
+    member m = members[msg.sender];
 
     if(validMember(m) && msg.value == fee) {
       m.totalInput += msg.value;
@@ -64,7 +65,8 @@ contract Insurance {
 
     if(memberExists() == false) return;
 
-    member m = getMember(msg.sender);
+    //member m = getMember();
+    member m = members[msg.sender];
 
     if(validMember(m)) {
       // Message all members for vote.
@@ -72,6 +74,7 @@ contract Insurance {
     } else {
       return;
     }
+
   }
 
   /* Pay out to a member following group consent to request. */
