@@ -48,7 +48,6 @@ contract Insurance {
 
     if(memberExists() == false) return;
 
-    //member m = getMember();
     member m = members[msg.sender];
 
     if(validMember(m) && msg.value == fee) {
@@ -65,7 +64,6 @@ contract Insurance {
 
     if(memberExists() == false) return;
 
-    //member m = getMember();
     member m = members[msg.sender];
 
     if(validMember(m)) {
@@ -96,10 +94,6 @@ contract Insurance {
 
   function memberExists() returns (bool) {
     return members[msg.sender].addr == 0;
-  }
-
-  function getMember() private returns (member) {
-    return members[msg.sender]; 
   }
 
 }
