@@ -2,13 +2,16 @@
 
 contract Insurance {
   
-  mapping(address => member) members;
   uint pool;        // Pool inputs minus pool outputs (how much cash is available).
   uint fee;         // The fee to be paid every feeInterval to maintain membership.
   uint feeInterval; // The frequency, in days, in which fees must be paid.
   uint waitPeriod;  /* The period, in days, for which new members must maintain
                        their membership before being able to make claims. */
+  uint pendingClaimsCount;
 
+  mapping(address => member) members;
+  claim[2] pendingClaims;
+  
   struct member {
     address addr;
 
@@ -18,12 +21,19 @@ contract Insurance {
     uint nextFeeDue;
   }
 
+  struct claim {
+    member claimant;
+    uint amount;
+    bytes8[] claimMsg;
+  }
+
   /* Pool setup */
   function Insurance(uint feeSet, uint feeIntervalSet, uint waitPeriodSet) {
     pool = 0;
     fee = feeSet;
     feeInterval = feeIntervalSet;
     waitPeriod = waitPeriodSet;
+    pendingClaims = 0;
   }
 
   /* Join this pool. */
@@ -58,13 +68,19 @@ contract Insurance {
 
   }
 
-  function requestPayOut(uint amount) {
+  function requestPayOut(uint amount, bytes8[] claimMsg) {
 
     member m = members[msg.sender];
 
     if(validMember(m)) {
-      // Message all members for vote.
-      // If vote is successful, payOut(msg.sender, amount)
+      claim c;
+      c.claimant = members[msg.sender];
+      c.amount = amount;
+      c.claimMsg = claimMsg;
+
+      pendingClaims[pendingClaimsCount] = c;
+      pendingClaimsCount++;
+
     } else {
       return;
     }
