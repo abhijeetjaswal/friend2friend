@@ -84,7 +84,7 @@ contract Insurance {
 
   /* ==== UTILS ==== */
 
-  function validPayIn(member m) returns (bool) {
+  function validPayIn(member m) private returns (bool) {
 
     if(validMember(m) && msg.value == fee) {
       return true;
@@ -94,9 +94,9 @@ contract Insurance {
     
   }
 
-  function validMember(member m) returns (bool) {
+  function validMember(member m) private returns (bool) {
 
-    if(m != 0 && m.nextFeeDue > block.timestamp) {
+    if(m.addr != 0 && m.nextFeeDue > block.timestamp) {
       return true; 
     } else {
       return false;
@@ -108,7 +108,7 @@ contract Insurance {
     return members[msg.sender].addr == 0;
   }
 
-  function getMember() returns (member) {
+  function getMember() private returns (member) {
     return members[msg.sender]; 
   }
 
