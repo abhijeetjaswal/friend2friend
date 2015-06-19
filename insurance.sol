@@ -80,6 +80,9 @@ contract Insurance {
 
       pendingClaims[pendingClaimsCount] = c;
       pendingClaimsCount++;
+      if(pendingClaimsCount == pendingClaims.length) {
+        pendingClaims.length = pendingClaimsCount * 2;
+      }
 
     } else {
       return;
