@@ -30,7 +30,7 @@ contract Insurance {
   function joinPool() {
 
     /* Check if this address is already a member and if the fee is correct. */
-    if(memberExists() == false || msg.value != fee) return;
+    if(memberExists() || msg.value != fee) return;
 
     /* Initialize new member. */
     member m;
@@ -92,11 +92,13 @@ contract Insurance {
   }
 
   function validMember(member m) returns (bool) {
+
     if(m != 0 && m.nextFeeDue > block.timestamp) {
       return true; 
     } else {
       return false;
     }
+
   }
 
   function memberExists() returns (bool) {
