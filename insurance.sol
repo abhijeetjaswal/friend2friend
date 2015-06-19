@@ -37,7 +37,6 @@ contract Insurance {
     fee = feeSet;
     feeInterval = feeIntervalSet;
     waitPeriod = waitPeriodSet;
-    pendingClaims = 0;
   }
 
   /* Join this pool. */
@@ -94,8 +93,8 @@ contract Insurance {
 
   }
 
-  function getClaim() {
-    
+  function getClaim(address claimant) returns (uint) {
+    return pendingClaims[claimant].amount;
   }
 
   /* Pay out to a member following group consent to request. */
