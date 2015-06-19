@@ -72,7 +72,10 @@ contract Insurance {
   }
 
   /* Pay out to a member following group consent to request. */
-  function payOut(address claimant, uint amount) {
+  function payOut(member m, uint amount) private {
+    pool -= amount;
+    m.totalBenefit += amount;
+    m.addr.send(amount);
     return;
   }
 
