@@ -61,7 +61,7 @@ contract Insurance {
 
     member m = members[msg.sender];
 
-    if(validMember(m) && msg.value == fee) {
+    if(validMember() && msg.value == fee) {
       m.totalInput += msg.value;
       pool += msg.value;
       m.nextFeeDue = m.nextFeeDue + feeInterval;
@@ -75,7 +75,7 @@ contract Insurance {
 
     member m = members[msg.sender];
 
-    if(validMember(m)) {
+    if(validMember()) {
       claim c;
       c.addr = members[msg.sender].addr;
       c.amount = amount;
@@ -98,7 +98,10 @@ contract Insurance {
   }
 
   /* Pay out to a member following group consent to request. */
-  function payOut(member m, uint amount) private {
+  function payOut(uint amount) private {
+
+    member m = members[msg.sender];
+
     pool -= amount;
     m.totalBenefit += amount;
     m.addr.send(amount);
@@ -107,7 +110,8 @@ contract Insurance {
 
   /* ==== UTILS ==== */
 
-  function validMember(member m) private returns (bool) {
+  function validMember() private returns (bool) {
+    member m = members[msg.sender];
     if(m.addr != 0 && m.nextFeeDue > block.timestamp) { return true; }
     else { return false; }
   }
