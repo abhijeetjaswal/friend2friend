@@ -107,6 +107,11 @@ contract Insurance {
     return;
   }
 
+  /* === GETTERS === */
+  function poolSize() returns (uint) {
+    return pool;
+  }
+
   /* ==== UTILS ==== */
 
   function validMember() private returns (bool) {
