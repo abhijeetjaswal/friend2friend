@@ -2,18 +2,16 @@
 
 contract Insurance {
   
+  address founder;
+  uint ready;
   uint pool;        // Pool inputs minus pool outputs (how much cash is available).
   uint fee;         // The fee to be paid every feeInterval to maintain membership.
   uint feeInterval; // The frequency, in days, in which fees must be paid.
   uint waitPeriod;  /* The period, in days, for which new members must maintain
                        their membership before being able to make claims. */
-  //uint pendingClaimsCount;
 
   mapping(address => member) members;
   mapping(address => claim) pendingClaims;
-  /* claim[2] pendingClaims; I think a problem with doing this as an array is
-                             that there's no (good) way for clients to query a
-                             particular claim. */
   
   struct member {
     address addr;
@@ -25,18 +23,24 @@ contract Insurance {
   }
 
   struct claim {
-    //member claimant;
     address addr;
     uint amount;
-    //bytes8[] claimMsg;
   }
 
   /* Pool setup */
-  function Insurance(uint feeSet, uint feeIntervalSet, uint waitPeriodSet) {
+  function Insurance() {
+    founder = msg.sender;
+    ready = 0;
+  }
+
+  function init(uint feeSet, uint feeIntervalSet, uint waitPeriodSet) {
+    if(msg.sender != founder || ready == 1) return;
+
     pool = 0;
     fee = feeSet;
     feeInterval = feeIntervalSet;
     waitPeriod = waitPeriodSet;
+    ready = 1;
   }
 
   /* Join this pool. */
@@ -79,13 +83,8 @@ contract Insurance {
       claim c;
       c.addr = members[msg.sender].addr;
       c.amount = amount;
-      //c.claimMsg = claimMsg;
 
       pendingClaims[msg.sender] = c;
-      //pendingClaimsCount++;
-      //if(pendingClaimsCount == pendingClaims.length) {
-      //  pendingClaims.length = pendingClaimsCount * 2;
-      //}
 
     } else {
       return;
